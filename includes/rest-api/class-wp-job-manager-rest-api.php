@@ -65,6 +65,8 @@ class WP_Job_Manager_REST_API {
 		include_once 'class-wp-job-manager-filters-status.php';
 		include_once 'class-wp-job-manager-data-stores-status.php';
 		include_once 'class-wp-job-manager-controllers-status.php';
+		include_once 'class-wp-job-manager-models-job-listings-custom-fields.php';
+		include_once 'class-wp-job-manager-registrable-job-listings.php';
 	}
 
 	/**
@@ -108,11 +110,16 @@ class WP_Job_Manager_REST_API {
 		$env->define_model( 'WP_Job_Manager_Models_Status' )
 			->with_data_store( new WP_Job_Manager_Data_Stores_Status( $env->model( 'WP_Job_Manager_Models_Status' ) ) );
 		$env->define_model( 'WP_Job_Manager_Filters_Status' );
+		$env->define_model( 'WP_Job_Manager_Models_Job_Listings_Custom_Fields' );
 
 		// Endpoints.
 		$env->rest_api( 'wpjm/v1' )
 			->add_endpoint( new WP_Job_Manager_REST_Controller_Settings( '/settings', 'WP_Job_Manager_Models_Settings' ) )
 			->add_endpoint( new WP_Job_Manager_Controllers_Status( '/status', 'WP_Job_Manager_Models_Status' ) );
+		$env->add_registrable( new WP_Job_Manager_REST_Registrable_Job_Listings(
+			'job_listing',
+			'WP_Job_Manager_Models_Job_Listings_Custom_Fields',
+			'fields' ) );
 	}
 }
 
